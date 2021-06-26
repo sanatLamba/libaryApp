@@ -16,6 +16,7 @@ export default class SearchScreen extends React.Component{
     componentDidMount=async()=>{
        var query = await db.collection("transaction").limit(10).get()
         query.docs.map((doc)=>{
+            console.log(doc.data())
             this.setState({
                 allTransactions: [...this.state.allTransactions,doc.data()],
                 lastVisibleTransaction: doc
@@ -30,7 +31,7 @@ export default class SearchScreen extends React.Component{
         if(enteredText[0].toLowerCase()==="b"){
             const transaction = await db.collection("transaction").where('bookId','==',text)
             .startAfter(this.state.lastVisibleTransaction).limit(10).get();
-            transaction.docs.map(()=>{
+            transaction.docs.map((doc)=>{
                 this.setState({
                     allTransactions: [...this.state.allTransactions,doc.data()],
                     lastVisibleTransaction: doc
@@ -40,7 +41,7 @@ export default class SearchScreen extends React.Component{
         else  if(enteredText[0].toLowerCase()==="s"){
             const transaction = await db.collection("transaction").where('studentId','==',text)
             .startAfter(this.state.lastVisibleTransaction).limit(10).get();
-            transaction.docs.map(()=>{
+            transaction.docs.map((doc)=>{
                 this.setState({
                     allTransactions: [...this.state.allTransactions,doc.data()],
                     lastVisibleTransaction: doc
@@ -53,7 +54,7 @@ export default class SearchScreen extends React.Component{
         var enteredText = text.split("");
         if(enteredText[0].toLowerCase()==="b"){
             const transaction = await db.collection("transaction").where('bookId','==',text).get();
-            transaction.docs.map(()=>{
+            transaction.docs.map((doc)=>{
                 this.setState({
                     allTransactions: [...this.state.allTransactions,doc.data()],
                     lastVisibleTransaction: doc
@@ -63,7 +64,7 @@ export default class SearchScreen extends React.Component{
         }
         else  if(enteredText[0].toLowerCase()==="s"){
             const transaction = await db.collection("transaction").where('studentId','==',text).get();
-            transaction.docs.map(()=>{
+            transaction.docs.map((doc)=>{
                 this.setState({
                     allTransactions: [...this.state.allTransactions,doc.data()],
                     lastVisibleTransaction: doc
@@ -93,7 +94,7 @@ export default class SearchScreen extends React.Component{
                 </TouchableOpacity>
                 <FlatList 
                     data = {this.state.allTransactions}
-                    renderItem = {({item})=>{
+                    renderItem = {({item})=>(
                         <View>
                             <Text>
                                 {"bookId is:"+ item.bookId}
@@ -108,7 +109,7 @@ export default class SearchScreen extends React.Component{
                                 {"transaction date is:"+ item.data}
                             </Text>
                         </View>
-                    }}
+                    )}
                     keyExtractor = {(item,index)=>{
                         index.toString()
                     }}
@@ -129,8 +130,9 @@ const styles = StyleSheet.create({
     },
     inputField: {
         borderWidth: 2,
-        height: 40,
-        width: 20,
+        height: 50,
+        width: 300,
         padding: 10,
+        marginTop: 30,
     }
   });
